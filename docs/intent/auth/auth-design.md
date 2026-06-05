@@ -37,6 +37,10 @@ The Auth Service manages user identities and issues JWT tokens. It serves as the
 - Maps the internal `User` entity to a `UserResponse` DTO to avoid exposing the hashed password.
 - Secured endpoint: Requires a valid JWT token with the `Administrator` authority.
 
+### 4. Actuator Endpoints (`/actuator/**`)
+- Exposes health, info, metrics, and other operational metadata.
+- Secured endpoint: Explicitly configured to permit all requests without authentication to allow Spring Boot Admin Server monitoring.
+
 ## Decisions & Alternatives
 
 | Decision | Chosen Option | Rejected Alternatives | Rationale |

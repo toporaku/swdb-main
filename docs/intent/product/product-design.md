@@ -31,6 +31,7 @@ It aligns with the HLD's architecture for the `PROD` segment.
 
 ### 4. Security
 - **JWT Authentication:** The service will use the `hasAuthority("ADMIN")` pattern from the Auth service for modifying endpoints to align roles. The new endpoints used by other services (`GET /gtin/{gtin}` and `PATCH /gtin/{gtin}/stock`) must be accessible with `hasAnyAuthority("CUSTOMER", "ADMIN")` because the Cart and Invoice services forward the client's JWT. Both `CUSTOMER` and `ADMIN` are permitted to perform these actions.
+- **Actuator Security:** Explicitly permits access to `/actuator/**` without token validation to allow Spring Boot Admin Server monitoring.
 
 ## Decisions & Alternatives
 
