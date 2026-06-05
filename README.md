@@ -184,7 +184,8 @@ sequenceDiagram
     
     Note over INV: Phase 2: Commit
     Note over INV: Calculate per item:<br/>total = qty × price<br/>taxes = total × 0.16<br/>subtotal = total - taxes
-    Note over INV: Apply coupon discount if provided
+    Note over INV: Query database to validate coupon & get discount percentage
+    Note over INV: Calculate and save discount amount
     Note over INV: Save Invoice + InvoiceItems
     
     loop For each CartItem
@@ -197,6 +198,22 @@ sequenceDiagram
     
     INV-->>C: 200 "La factura ha sido registrada"
 ```
+
+## Funcionalidades Extra del Checkout (Persistencia y Cupones)
+
+### 1. Dirección de Envío e Información de Pago
+Al procesar una compra a través del cuerpo (`body`) en `POST /invoice`, se pueden especificar los datos opcionales de envío y pago (ej: `"shipping_address"`, `"payment_method"`). Estos datos se persisten de manera estructurada en la tabla `invoice` de `db_invoice`.
+
+### 2. Catálogo Dinámico de Cupones de Descuento
+En lugar de realizar una comprobación estática en el código, el sistema utiliza un catálogo de cupones almacenado en la base de datos `db_invoice` mediante la tabla `coupon`:
+*   **Estructura de la Tabla `coupon`:**
+    *   `coupon_id` (PK, Autoincremental)
+    *   `code` (Código del cupón, único y sensible a mayúsculas/minúsculas, ej: `"SAVE10"`)
+    *   `discount_percentage` (Porcentaje de descuento antes de impuestos, ej: `10.0` para un 10% de descuento)
+    *   `active` (Estado del cupón, habilitado/deshabilitado)
+*   **Validación de Checkout:** Durante el checkout, el servicio consulta la tabla `coupon`. Si el cupón ingresado existe y está activo, aplica el descuento dinámicamente y lo persiste en la columna `discount` de la tabla `invoice`. Si el cupón es inválido o está inactivo, rechaza la transacción y lanza un error `400 Bad Request`.
+
+---
 
 ## Métricas de Éxito
 
