@@ -1,0 +1,587 @@
+{
+	"info": {
+		"_postman_id": "90e24177-3bc5-4089-9ef9-ee344cf7a216",
+		"name": "SWDB 2026 - Colección de Pruebas",
+		"description": "Colección de endpoints para evaluar el ecosistema de microservicios de SWDB 2026. Idioma: Español (México). Incluye pruebas automatizadas y extracción dinámica de JWT para autorización simplificada.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "1. Autenticación y Usuarios",
+			"item": [
+				{
+					"name": "Iniciar Sesión como Administrador",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Inicio de sesión exitoso (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Retorna Token JWT\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('token');",
+									"    // Guardar token en variable de entorno",
+									"    pm.environment.set(\"jwt_token\", jsonData.token);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"admin\",\n    \"password\": \"Password123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/auth-service/login",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"auth-service",
+								"login"
+							]
+						},
+						"description": "Autentica al administrador predeterminado y extrae el token JWT para peticiones posteriores."
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar Nuevo Usuario Cliente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Registro exitoso (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"cliente_postman\",\n    \"email\": \"cliente.postman@mail.com\",\n    \"password\": \"Password123!\",\n    \"name\": \"Cliente\",\n    \"lastName\": \"Postman\",\n    \"phoneNumber\": \"5559876543\",\n    \"roles\": [\"User\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/auth-service/user",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"auth-service",
+								"user"
+							]
+						},
+						"description": "Registra un usuario cliente para las pruebas del flujo de compras."
+					},
+					"response": []
+				},
+				{
+					"name": "Iniciar Sesión como Cliente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Inicio de sesión exitoso (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Retorna Token JWT de Cliente\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('token');",
+									"    pm.environment.set(\"jwt_token\", jsonData.token);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"cliente_postman\",\n    \"password\": \"Password123!\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/auth-service/login",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"auth-service",
+								"login"
+							]
+						},
+						"description": "Inicia sesión como el cliente recién creado para obtener el token JWT."
+					},
+					"response": []
+				}
+			],
+			"description": "Endpoints relacionados con la gestión de seguridad y usuarios."
+		},
+		{
+			"name": "2. Clientes y Regiones",
+			"item": [
+				{
+					"name": "Listar Regiones Públicas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Listado exitoso (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Retorna lista de regiones\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{gateway_url}}/customer-service/region",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"customer-service",
+								"region"
+							]
+						},
+						"description": "Obtiene las regiones activas en el sistema. Es público."
+					},
+					"response": []
+				},
+				{
+					"name": "Crear Perfil de Cliente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Perfil de cliente creado (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Cliente\",\n    \"surname\": \"Postman\",\n    \"rfc\": \"POST123456XYZ\",\n    \"mail\": \"cliente.postman@mail.com\",\n    \"phone_number\": \"5559876543\",\n    \"address\": \"Av. Revolución 456, CDMX\",\n    \"user_id\": 3,\n    \"region_id\": 3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/customer-service/customer",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"customer-service",
+								"customer"
+							]
+						},
+						"description": "Asocia la información de perfil al usuario autenticado (requiere JWT)."
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar Todos los Clientes (Solo Admin)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Obtención de clientes exitosa (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/customer-service/customer",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"customer-service",
+								"customer"
+							]
+						},
+						"description": "Permite al administrador ver la lista completa de perfiles de clientes."
+					},
+					"response": []
+				}
+			],
+			"description": "Administración de clientes y sus regiones."
+		},
+		{
+			"name": "3. Catálogo de Productos",
+			"item": [
+				{
+					"name": "Listar Categorías Activas",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status 200 OK\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/product-service/category/active",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"product-service",
+								"category",
+								"active"
+							]
+						},
+						"description": "Obtiene las categorías habilitadas para la venta."
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar Producto por GTIN",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Producto encontrado (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Retorna campos del producto\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.have.property('gtin');",
+									"    pm.expect(jsonData).to.have.property('product');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/product-service/product/gtin/1234567890123",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"product-service",
+								"product",
+								"gtin",
+								"1234567890123"
+							]
+						},
+						"description": "Obtiene la ficha técnica y stock del producto a través del GTIN único."
+					},
+					"response": []
+				}
+			],
+			"description": "Administración del inventario y clasificación de productos."
+		},
+		{
+			"name": "4. Carrito de Compras",
+			"item": [
+				{
+					"name": "Agregar Producto al Carrito",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Agregado al carrito (Status 201)\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cartId\": 3,\n    \"gtin\": \"1234567890123\",\n    \"quantity\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/cart-service/cart-item",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"cart-service",
+								"cart-item"
+							]
+						},
+						"description": "Agrega una cantidad específica de un producto al carrito del usuario."
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar Carrito de un Usuario",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Consulta exitosa (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/cart-service/cart-item/user/3",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"cart-service",
+								"cart-item",
+								"user",
+								"3"
+							]
+						},
+						"description": "Muestra los artículos listos para comprar que están en el carrito."
+					},
+					"response": []
+				}
+			],
+			"description": "Servicio de almacenamiento temporal de productos seleccionados."
+		},
+		{
+			"name": "5. Facturación y Compra",
+			"item": [
+				{
+					"name": "Realizar Checkout (Facturar)",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Compra procesada y facturada (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"shipping_address\": \"Av. Revolución 456, CDMX\",\n    \"payment_method\": \"Tarjeta de Crédito\",\n    \"coupon_code\": \"SAVE10\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{gateway_url}}/invoice-service/invoice",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"invoice-service",
+								"invoice"
+							]
+						},
+						"description": "Cierra el carrito de compras, descuenta stock de productos, aplica cupones y genera la factura fiscal."
+					},
+					"response": []
+				},
+				{
+					"name": "Listar Facturas del Cliente",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Consulta de facturas exitosa (Status 200)\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{jwt_token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{gateway_url}}/invoice-service/invoice",
+							"host": [
+								"{{gateway_url}}"
+							],
+							"path": [
+								"invoice-service",
+								"invoice"
+							]
+						},
+						"description": "Obtiene el historial de compras facturadas para el cliente autenticado."
+					},
+					"response": []
+				}
+			],
+			"description": "Orquestador transaccional que finaliza la compra y emite facturas."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "gateway_url",
+			"value": "http://localhost:8080",
+			"type": "string"
+		},
+		{
+			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

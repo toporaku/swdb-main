@@ -8,15 +8,15 @@ import os
 import signal
 
 SERVICES = [
-    {"name": "config-server", "dir": "config-server", "port": 8888, "url": "http://localhost:8888/actuator/health"},
-    {"name": "registry-service", "dir": "registry-service", "port": 8761, "url": "http://localhost:8761/eureka/apps"},
-    {"name": "gateway-service", "dir": "gateway-service", "port": 8080, "url": "http://localhost:8080/actuator/health"},
-    {"name": "admin-service", "dir": "admin-service", "port": 9090, "url": "http://localhost:9090/actuator/health"},
-    {"name": "auth-service", "dir": "auth-service", "port": 8082, "url": "http://localhost:8082/actuator/health"},
-    {"name": "product-service", "dir": "product-service", "port": 8083, "url": "http://localhost:8083/actuator/health"},
-    {"name": "cart-service", "dir": "cart-service", "port": 8085, "url": "http://localhost:8085/actuator/health"},
-    {"name": "invoice-service", "dir": "invoice-service", "port": 8084, "url": "http://localhost:8084/actuator/health"},
-    {"name": "customer-service", "dir": "customer-service", "port": 8081, "url": "http://localhost:8081/actuator/health"}
+    {"name": "config-server", "dir": "../swdb-config-server", "port": 8888, "url": "http://localhost:8888/actuator/health"},
+    {"name": "registry-service", "dir": "../swdb-registry-service", "port": 8761, "url": "http://localhost:8761/eureka/apps"},
+    {"name": "gateway-service", "dir": "../swdb-gateway-service", "port": 8080, "url": "http://localhost:8080/actuator/health"},
+    {"name": "admin-service", "dir": "../swdb-admin-service", "port": 9090, "url": "http://localhost:9090/actuator/health"},
+    {"name": "auth-service", "dir": "../swdb-auth-service", "port": 8082, "url": "http://localhost:8082/actuator/health"},
+    {"name": "product-service", "dir": "../swdb-product-service", "port": 8083, "url": "http://localhost:8083/actuator/health"},
+    {"name": "cart-service", "dir": "../swdb-cart-service", "port": 8085, "url": "http://localhost:8085/actuator/health"},
+    {"name": "invoice-service", "dir": "../swdb-invoice-service", "port": 8084, "url": "http://localhost:8084/actuator/health"},
+    {"name": "customer-service", "dir": "../swdb-customer-service", "port": 8081, "url": "http://localhost:8081/actuator/health"}
 ]
 
 processes = []
@@ -75,7 +75,7 @@ def main():
     # 0. Database cleanup
     print("Cleaning up test database records...")
     subprocess.run([
-        "mysql", "-u", "root", "-pDwb2026_Spring!", "-e", 
+        "mysql", "-u", "swdb_user", "-pswdb_pass", "-e", 
         "DELETE FROM db_auth.user_roles WHERE user_id IN (SELECT id FROM db_auth.user WHERE username='customer_e2e'); "
         "DELETE FROM db_auth.user WHERE username='customer_e2e'; "
         "DELETE FROM dwb_customer_service.customer_image WHERE customer_id IN (SELECT customer_id FROM dwb_customer_service.customer WHERE mail='customer_e2e@mail.com'); "

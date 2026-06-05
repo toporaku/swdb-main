@@ -5,15 +5,15 @@ import os
 import signal
 
 SERVICES = [
-    {"name": "config-server", "dir": "config-server", "port": 8888},
-    {"name": "registry-service", "dir": "registry-service", "port": 8761},
-    {"name": "gateway-service", "dir": "gateway-service", "port": 8080},
-    {"name": "admin-service", "dir": "admin-service", "port": 9090},
-    {"name": "auth-service", "dir": "auth-service", "port": 8082},
-    {"name": "product-service", "dir": "product-service", "port": 8083},
-    {"name": "cart-service", "dir": "cart-service", "port": 8085},
-    {"name": "invoice-service", "dir": "invoice-service", "port": 8084},
-    {"name": "customer-service", "dir": "customer-service", "port": 8081}
+    {"name": "config-server", "dir": "../swdb-config-server", "port": 8888},
+    {"name": "registry-service", "dir": "../swdb-registry-service", "port": 8761},
+    {"name": "gateway-service", "dir": "../swdb-gateway-service", "port": 8080},
+    {"name": "admin-service", "dir": "../swdb-admin-service", "port": 9090},
+    {"name": "auth-service", "dir": "../swdb-auth-service", "port": 8082},
+    {"name": "product-service", "dir": "../swdb-product-service", "port": 8083},
+    {"name": "cart-service", "dir": "../swdb-cart-service", "port": 8085},
+    {"name": "invoice-service", "dir": "../swdb-invoice-service", "port": 8084},
+    {"name": "customer-service", "dir": "../swdb-customer-service", "port": 8081}
 ]
 
 processes = []
@@ -35,15 +35,15 @@ def kill_port_owner(port):
         pass
 
 def cleanup(sig=None, frame=None):
-    print("\n\nShutting down all microservices...")
+    print("\n\nApagando todos los microservicios...")
     for p, name in processes:
-        print(f"Stopping {name}...")
+        print(f"Deteniendo {name}...")
         p.terminate()
         try:
             p.wait(timeout=5)
         except subprocess.TimeoutExpired:
             p.kill()
-    print("All services stopped.")
+    print("Todos los servicios detenidos.")
     sys.exit(0)
 
 def main():
@@ -52,19 +52,19 @@ def main():
     
     os.makedirs("logs", exist_ok=True)
     
-    print("Pre-flight port cleanup...")
+    print("Limpieza previa de puertos...")
     for svc in SERVICES:
         if check_port_in_use(svc["port"]):
-            print(f"Port {svc['port']} is already in use by {svc['name']}. Cleaning up...")
+            print(f"El puerto {svc['port']} ya está en uso por {svc['name']}. Limpiando...")
             kill_port_owner(svc["port"])
             
-    print("\nStarting microservices...")
+    print("\nIniciando microservicios...")
     for svc in SERVICES:
         name = svc["name"]
         directory = svc["dir"]
         port = svc["port"]
         
-        print(f"Starting {name} on port {port}...")
+        print(f"Iniciando {name} en el puerto {port}...")
         log_file = open(f"logs/{name}.log", "w")
         p = subprocess.Popen(["mvn", "spring-boot:run"], cwd=directory, stdout=log_file, stderr=log_file)
         processes.append((p, name))
@@ -74,23 +74,23 @@ def main():
         success = False
         while retries > 0:
             if p.poll() is not None:
-                print(f"ERROR: {name} process terminated early. Check logs/{name}.log")
+                print(f"ERROR: El proceso {name} terminó inesperadamente. Revisa logs/{name}.log")
                 cleanup()
                 
             if check_port_in_use(port):
-                print(f"-> {name} is UP on port {port}.")
+                print(f"-> {name} está ACTIVO en el puerto {port}.")
                 success = True
                 break
             time.sleep(2)
             retries -= 1
             
         if not success:
-            print(f"ERROR: {name} failed to start on port {port} within timeout. Check logs/{name}.log")
+            print(f"ERROR: {name} falló al iniciar en el puerto {port} dentro del tiempo límite. Revisa logs/{name}.log")
             cleanup()
             
     print("\n==========================================================")
-    print("ALL SERVICES ACTIVE AND DEPLOYED!")
-    print("Press Ctrl+C to stop all services and terminate processes.")
+    print("¡TODOS LOS SERVICIOS ESTÁN ACTIVOS Y DESPLEGADOS!")
+    print("Presiona Ctrl+C para detener todos los servicios de forma segura.")
     print("==========================================================")
     
     # Idle loop to keep running
