@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "90e24177-3bc5-4089-9ef9-ee344cf7a216",
 		"name": "SWDB 2026 - Colección de Pruebas",
-		"description": "Colección de endpoints para evaluar el ecosistema de microservicios de SWDB 2026. Idioma: Español (México). Incluye pruebas automatizadas y extracción dinámica de JWT para autorización simplificada.",
+		"description": "Colección de endpoints para evaluar el ecosistema de microservicios de SWDB 2026. Incluye pruebas automatizadas y extracción dinámica de JWT para autorización simplificada.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -23,8 +23,9 @@
 									"pm.test(\"Retorna Token JWT\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('token');",
-									"    // Guardar token en variable de entorno",
+									"    // Guardar token en variable de entorno y de colección",
 									"    pm.environment.set(\"jwt_token\", jsonData.token);",
+									"    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
 									"});"
 								],
 								"type": "text/javascript"
@@ -113,6 +114,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('token');",
 									"    pm.environment.set(\"jwt_token\", jsonData.token);",
+									"    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
 									"});"
 								],
 								"type": "text/javascript"
