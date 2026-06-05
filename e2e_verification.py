@@ -79,7 +79,10 @@ def main():
         "DELETE FROM db_auth.user_roles WHERE user_id IN (SELECT id FROM db_auth.user WHERE username='customer_e2e'); "
         "DELETE FROM db_auth.user WHERE username='customer_e2e'; "
         "DELETE FROM dwb_customer_service.customer_image WHERE customer_id IN (SELECT customer_id FROM dwb_customer_service.customer WHERE mail='customer_e2e@mail.com'); "
-        "DELETE FROM dwb_customer_service.customer WHERE mail='customer_e2e@mail.com';"
+        "DELETE FROM dwb_customer_service.customer WHERE mail='customer_e2e@mail.com'; "
+        "INSERT INTO dwb_customer_service.region (region_id, region, tag, status) VALUES (1, 'North Region', 'NORTH', 1) ON DUPLICATE KEY UPDATE status=1; "
+        "INSERT INTO SWDB2026.category (category_id, category, tag, status) VALUES (1, 'Electrónica', 'ELEC', 1) ON DUPLICATE KEY UPDATE status=1; "
+        "INSERT INTO SWDB2026.product (product_id, gtin, product, description, price, stock, category_id, status) VALUES (1, '1234567890123', 'Laptop Pro 15', 'Laptop de prueba E2E', 15000.0, 100, 1, 1) ON DUPLICATE KEY UPDATE stock=100;"
     ], capture_output=True)
     
     # 1. Clean up existing processes on target ports
