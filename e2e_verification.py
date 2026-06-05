@@ -75,7 +75,7 @@ def main():
     # 0. Database cleanup
     print("Cleaning up test database records...")
     subprocess.run([
-        "mysql", "-u", "swdb_user", "-pswdb_pass", "-e", 
+        "mysql", "-u", "swdb_user", "-pSwdb_2026_Project!", "-e", 
         "DELETE FROM db_auth.user_roles WHERE user_id IN (SELECT id FROM db_auth.user WHERE username='customer_e2e'); "
         "DELETE FROM db_auth.user WHERE username='customer_e2e'; "
         "DELETE FROM dwb_customer_service.customer_image WHERE customer_id IN (SELECT customer_id FROM dwb_customer_service.customer WHERE mail='customer_e2e@mail.com'); "
