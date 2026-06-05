@@ -23,7 +23,7 @@ Todos los componentes de este ecosistema de microservicios están modularizados 
 
 ---
 
-## 🛠️ Instrucciones de Configuración Inicial
+## Instrucciones de Configuración Inicial
 
 Para levantar todo el ecosistema de forma local, por favor siga los siguientes pasos detallados:
 
@@ -60,7 +60,7 @@ Ofrecemos dos alternativas para el arranque según su sistema operativo y herram
 
 ---
 
-## 🧪 Guía de Pruebas y Validación (Postman & Bruno)
+## Guía de Pruebas y Validación (Postman & Bruno)
 
 Hemos integrado una colección de APIs completa lista para importarse y ejecutarse en su herramienta de pruebas preferida (Postman, Bruno, Insomnia, etc.):
 
@@ -74,7 +74,7 @@ Hemos integrado una colección de APIs completa lista para importarse y ejecutar
 
 ---
 
-## 🌿 Estrategia de Ramificación (Git Branching Strategy)
+## Estrategia de Ramificación (Git Branching Strategy)
 
 Para mantener la granularidad del código y un control estricto de los cambios, todos los repositorios del ecosistema siguen un estándar estructurado de ramas:
 
@@ -91,5 +91,62 @@ Para mantener la granularidad del código y un control estricto de los cambios, 
 
 ## 📐 Diseño Arquitectónico del Sistema
 
-Para comprender el flujo detallado de mensajería, el patrón de descubrimiento Eureka, las reglas de ruteo del API Gateway y los diagramas secuenciales del checkout en la base de datos, consulte la documentación arquitectónica en español mexicano:
+A continuación se presenta el diagrama de arquitectura de alto nivel del ecosistema:
+
+```mermaid
+graph TB
+    Client["External Client / Postman"]
+    GW["Gateway Service :8080"]
+    REG["Registry Service (Eureka) :8761"]
+    CFG["Config Server :8888"]
+    ADM["Admin Service :9090"]
+    
+    AUTH["Auth Service :8082"]
+    PROD["Product Service :8083"]
+    CART["Cart Service :8085"]
+    INV["Invoice Service :8084"]
+    CUST["Customer Service :8081"]
+    
+    DB_AUTH[("DWB2026_2")]
+    DB_PROD[("SWDB2026")]
+    DB_CART[("db_cart")]
+    DB_INV[("db_invoice")]
+    DB_CUST[("dwb_customer_service")]
+    
+    Client -->|"HTTP"| GW
+    GW -->|"Route"| AUTH
+    GW -->|"Route"| PROD
+    GW -->|"Route"| CART
+    GW -->|"Route"| INV
+    GW -->|"Route"| CUST
+    
+    INV -->|"RestTemplate + Eureka"| CART
+    INV -->|"RestTemplate + Eureka"| PROD
+    CART -->|"RestTemplate + Eureka"| PROD
+    
+    AUTH --- DB_AUTH
+    PROD --- DB_PROD
+    CART --- DB_CART
+    INV --- DB_INV
+    CUST --- DB_CUST
+    
+    REG -.-|"Service Discovery"| GW
+    REG -.-|"Service Discovery"| AUTH
+    REG -.-|"Service Discovery"| PROD
+    REG -.-|"Service Discovery"| CART
+    REG -.-|"Service Discovery"| INV
+    REG -.-|"Service Discovery"| CUST
+    REG -.-|"Service Discovery"| ADM
+    
+    CFG -.-|"Config"| GW
+    CFG -.-|"Config"| REG
+    CFG -.-|"Config"| ADM
+    CFG -.-|"Config"| AUTH
+    CFG -.-|"Config"| PROD
+    CFG -.-|"Config"| CART
+    CFG -.-|"Config"| INV
+    CFG -.-|"Config"| CUST
+```
+
+Para comprender el flujo detallado de mensajería, el patrón de descubrimiento Eureka, las reglas de ruteo del API Gateway y los diagramas secuenciales del checkout en la base de datos, consulte la documentación arquitectónica en español de México:
 👉 **[Diseño de Alto Nivel (HLD)](file:///Users/toporaku/code/sdwb/projecto_final/swdb-main/docs/high-level-design.md)**
