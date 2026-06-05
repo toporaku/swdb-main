@@ -130,6 +130,10 @@ Routes are defined under `spring.cloud.gateway.server.webmvc.routes`. Each route
 
 This means `GET http://localhost:8080/product-service/product` becomes `GET http://PRODUCT:8083/product`.
 
+### Actuator Endpoints (in config-data `gateway-service.yaml`)
+
+The Gateway Service exposes Actuator endpoints to allow Spring Boot Admin to monitor its health and resource utilization. These endpoints are exposed under port 8080 and require no authentication.
+
 ### Complete route table
 
 | Route ID | External Path | Target | StripPrefix |

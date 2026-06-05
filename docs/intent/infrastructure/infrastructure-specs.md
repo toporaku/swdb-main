@@ -12,6 +12,7 @@
 - [x] **INFRA-DATA-002**: The config-data repository shall contain gateway route definitions for all five business services (auth, product, cart, invoice, customer) under `spring.cloud.gateway.server.webmvc.routes`, each with a `StripPrefix=1` filter.
 - [x] **INFRA-DATA-003**: Each business service's config-data file shall include Eureka client registration properties (`eureka.client.service-url.defaultZone`, `eureka.client.register-with-eureka=true`, `eureka.client.fetch-registry=true`).
 - [x] **INFRA-DATA-004**: Each business service's config-data file shall expose Actuator endpoints (`health,info,metrics,loggers,threaddump,heapdump`) with `management.endpoint.health.show-details=always` for Spring Boot Admin monitoring.
+- [ ] **INFRA-DATA-005**: The gateway-service config-data file shall expose Actuator endpoints (`health,info,metrics,loggers,threaddump,heapdump`) with `management.endpoint.health.show-details=always` for Spring Boot Admin monitoring.
 
 ## Registry Service (Eureka)
 
