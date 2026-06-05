@@ -25,8 +25,8 @@ CREATE DATABASE dwb_customer_service CHARACTER SET utf8mb4 COLLATE utf8mb4_spani
 DROP USER IF EXISTS 'swdb_user'@'localhost';
 DROP USER IF EXISTS 'swdb_user'@'%';
 
-CREATE USER 'swdb_user'@'localhost' IDENTIFIED BY 'swdb_pass';
-CREATE USER 'swdb_user'@'%' IDENTIFIED BY 'swdb_pass';
+CREATE USER 'swdb_user'@'localhost' IDENTIFIED BY 'Swdb_2026_Project!';
+CREATE USER 'swdb_user'@'%' IDENTIFIED BY 'Swdb_2026_Project!';
 
 -- 4. Asignación de permisos al usuario sobre todas las bases de datos del sistema
 GRANT ALL PRIVILEGES ON SWDB2026.* TO 'swdb_user'@'localhost';
