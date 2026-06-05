@@ -24,4 +24,4 @@
 - [x] **AUTH-INT-001**: The Auth Service shall retrieve its configuration (including database credentials and JWT secret) from the Config Server.
 - [x] **AUTH-INT-002**: The Auth Service shall register itself with Eureka as `auth`.
 - [x] **AUTH-INT-003**: The Auth Service shall initialize a default Administrator account in the database on startup.
-- [ ] **AUTH-INT-004**: The Auth Service shall permit access to `/actuator/**` endpoints without authentication to allow monitoring.
+- [x] **AUTH-INT-004**: The Auth Service shall permit access to `/actuator/**` endpoints without authentication to allow monitoring.

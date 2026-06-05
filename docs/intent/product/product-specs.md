@@ -31,4 +31,4 @@
 - `[x] PROD-SEC-001`: The product service shall reject requests lacking a valid JWT.
 - `[x] PROD-SEC-002`: The product service shall restrict management endpoints (PROD-CAT-* and PROD-MGT-*) to users with the ADMIN role.
 - `[x] PROD-SEC-003`: The product service shall allow internal endpoints (PROD-INT-*) to be called by users with the CUSTOMER or ADMIN role.
-- `[ ] PROD-SEC-004`: The product service shall permit access to `/actuator/**` endpoints without authentication to allow monitoring.
+- `[x] PROD-SEC-004`: The product service shall permit access to `/actuator/**` endpoints without authentication to allow monitoring.
