@@ -47,6 +47,17 @@ GRANT ALL PRIVILEGES ON dwb_customer_service.* TO 'swdb_user'@'%';
 -- Aplicar los cambios de privilegios
 FLUSH PRIVILEGES;
 
+-- 5. Sembrar cupones por defecto en db_invoice
+CREATE TABLE IF NOT EXISTS db_invoice.coupon (
+    coupon_id INT AUTO_INCREMENT PRIMARY KEY,
+    code VARCHAR(50) UNIQUE NOT NULL,
+    discount_percentage DOUBLE NOT NULL,
+    active BOOLEAN DEFAULT TRUE
+);
+
+INSERT IGNORE INTO db_invoice.coupon (coupon_id, code, discount_percentage, active) 
+VALUES (1, 'SAVE10', 10.0, TRUE);
+
 -- =============================================================================
 -- FIN DEL SCRIPT DE CONFIGURACIÓN
 -- =============================================================================
