@@ -113,8 +113,20 @@
 									"pm.test(\"Retorna Token JWT de Cliente\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('token');",
-									"    pm.environment.set(\"jwt_token\", jsonData.token);",
-									"    pm.collectionVariables.set(\"jwt_token\", jsonData.token);",
+									"    var token = jsonData.token;",
+									"    pm.environment.set(\"jwt_token\", token);",
+									"    pm.collectionVariables.set(\"jwt_token\", token);",
+									"",
+									"    try {",
+									"        var payloadBase64 = token.split('.')[1];",
+									"        var decodedPayload = JSON.parse(atob(payloadBase64.replace(/-/g, '+').replace(/_/g, '/')));",
+									"        var userId = decodedPayload.id;",
+									"        pm.environment.set(\"user_id\", userId);",
+									"        pm.collectionVariables.set(\"user_id\", userId);",
+									"        console.log(\"ID de usuario extraído dinámicamente: \" + userId);",
+									"    } catch(e) {",
+									"        console.error(\"Error decodificando JWT: \" + e);",
+									"    }",
 									"});"
 								],
 								"type": "text/javascript"
@@ -216,7 +228,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Cliente\",\n    \"surname\": \"Postman\",\n    \"rfc\": \"POST123456XYZ\",\n    \"mail\": \"cliente.postman@mail.com\",\n    \"phone_number\": \"5559876543\",\n    \"address\": \"Av. Revolución 456, CDMX\",\n    \"user_id\": 3,\n    \"region_id\": 3\n}",
+							"raw": "{\n    \"name\": \"Cliente\",\n    \"surname\": \"Postman\",\n    \"rfc\": \"POST123456XYZ\",\n    \"mail\": \"cliente.postman@mail.com\",\n    \"phone_number\": \"5559876543\",\n    \"address\": \"Av. Revolución 456, CDMX\",\n    \"user_id\": {{user_id}},\n    \"region_id\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -398,7 +410,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"cartId\": 3,\n    \"gtin\": \"1234567890123\",\n    \"quantity\": 1\n}",
+							"raw": "{\n    \"cartId\": {{user_id}},\n    \"gtin\": \"1234567890123\",\n    \"quantity\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -444,7 +456,7 @@
 							}
 						],
 						"url": {
-							"raw": "{{gateway_url}}/cart-service/cart-item/user/3",
+							"raw": "{{gateway_url}}/cart-service/cart-item/user/{{user_id}}",
 							"host": [
 								"{{gateway_url}}"
 							],
@@ -452,7 +464,7 @@
 								"cart-service",
 								"cart-item",
 								"user",
-								"3"
+								"{{user_id}}"
 							]
 						},
 						"description": "Muestra los artículos listos para comprar que están en el carrito."
@@ -582,6 +594,11 @@
 		},
 		{
 			"key": "jwt_token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
 			"value": "",
 			"type": "string"
 		}
