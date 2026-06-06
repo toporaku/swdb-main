@@ -4,7 +4,7 @@ Este es el repositorio orquestador central (**swdb-main**) para el proyecto fina
 
 ---
 
-## 📋 Directorio de Servicios
+## Directorio de Servicios
 
 Todos los componentes de este ecosistema de microservicios están modularizados en sus propios repositorios independientes bajo la convención de nomenclatura `swdb-`:
 
