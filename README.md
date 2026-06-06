@@ -4,7 +4,7 @@ Este es el repositorio orquestador central (**swdb-main**) para el proyecto fina
 
 ---
 
-## 📋 Directorio de Servicios
+## Directorio de Servicios
 
 Todos los componentes de este ecosistema de microservicios están modularizados en sus propios repositorios independientes bajo la convención de nomenclatura `swdb-`:
 
@@ -221,5 +221,5 @@ En lugar de realizar una comprobación estática en el código, el sistema utili
 2. **El flujo de pago completo tiene éxito** — Registrar usuario → Iniciar sesión → Agregar productos al carrito → POST /invoice → Factura guardada, stock decrementado, carrito vaciado.
 3. **La validación de stock rechaza stock insuficiente** — Agregar más artículos de los disponibles devuelve un error tanto al agregar al carrito como al finalizar la compra.
 4. **Las funciones adicionales funcionan** — La dirección de envío y la información de pago se guardan en la factura; un código de cupón válido aplica un descuento porcentual.
-5. **Config Server impulsa la configuración** — Cambiar un valor en config-data y actualizar recoge el nuevo valor.
+5. **Config Server impulsa la configuración**.
 6. **El panel de administración muestra todos los servicios** — Spring Boot Admin en `http://localhost:9090` lista todos los servicios registrados con estado de salud.
